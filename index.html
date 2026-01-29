@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>📱 Innovatsion Iqtisodiyot Testi</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 15px;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+            position: relative;
+        }
+        
+        h1 {
+            color: #2d3748;
+            font-size: 1.6rem;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .stats-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stats-label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            margin-bottom: 4px;
+        }
+        
+        .stats-value {
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+        
+        .set-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .set-btn {
+            padding: 14px 8px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #4a5568;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            -webkit-appearance: none;
+        }
+        
+        .set-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+        
+        .set-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .question-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e2e8f0;
+            display: none;
+        }
+        
+        .question-card.active {
+            display: block;
+            animation: slideIn 0.4s ease;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .question-number {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .question-text {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+        
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+        
+        .option {
+            padding: 18px 15px;
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            color: #4a5568;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        .option:active {
+            background: #edf2f7;
+            transform: scale(0.99);
+        }
+        
+        .option.correct {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border-color: #059669;
+        }
+        
+        .option.wrong {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border-color: #dc2626;
+        }
+        
+        .option.disabled {
+            pointer-events: none;
+        }
+        
+        .control-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin: 25px 0;
+        }
+        
+        .control-btn {
+            padding: 18px 12px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            -webkit-appearance: none;
+        }
+        
+        .control-btn:active {
+            transform: scale(0.96);
+        }
+        
+        #prev-btn {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        #random-btn {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+        }
+        
+        #next-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .action-btn {
+            width: 100%;
+            padding: 20px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #result-btn {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+            display: none;
+            box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+        }
+        
+        #restart-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            display: none;
+            margin-top: 15px;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin: 25px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .feedback {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 0;
+            animation: feedbackAnimation 1s ease;
+        }
+        
+        @keyframes feedbackAnimation {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+            50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -200%) scale(0.8); }
+        }
+        
+        @media (max-width: 380px) {
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.4rem;
+            }
+            
+            .set-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .control-buttons {
+                grid-template-columns: 1fr;
+            }
+            
+            .question-text {
+                font-size: 1.1rem;
+            }
+            
+            .option {
+                padding: 16px 12px;
+                font-size: 0.95rem;
+            }
+        }
+        
+        /* iPhone uchun maxsus optimizatsiya */
+        @supports (-webkit-touch-callout: none) {
+            body {
+                padding: 10px;
+                padding-bottom: 40px;
+            }
+            
+            .container {
+                border-radius: 16px;
+                padding: 15px;
+            }
+            
+            .option {
+                padding: 20px 15px;
+            }
+            
+            .control-btn {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>📱 Innovatsion Iqtisodiyot Testi</h1>
+        <div class="stats-bar">
+            <div class="stats-item">
+                <div class="stats-label">GURUH</div>
+                <div class="stats-value" id="set-number">1</div>
+            </div>
+            <div class="stats-item">
+                <div class="stats-label">SAVOL</div>
+                <div class="stats-value" id="current-question">1</div>
+            </div>
+            <div class="stats-item">
+                <div class="stats-label">TO'G'RI</div>
+                <div class="stats-value" id="correct-count">0</div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    
+    <div class="set-selector">
+        <button class="set-btn active" data-set="1">1-25</button>
+        <button class="set-btn" data-set="2">26-50</button>
+        <button class="set-btn" data-set="3">51-75</button>
+        <button class="set-btn" data-set="4">76-100</button>
+        <button class="set-btn" data-set="5">101-125</button>
+        <button class="set-btn" data-set="6">126-140</button>
+    </div>
+    
+    <div id="quiz-wrapper"></div>
+    
+    <div class="control-buttons">
+        <button class="control-btn" id="prev-btn">⬅️ Oldingi</button>
+        <button class="control-btn" id="random-btn">🎲 Random</button>
+        <button class="control-btn" id="next-btn">Keyingi ➡️</button>
+    </div>
+    
+    <button class="action-btn" id="result-btn">📊 Natijani ko'rsatish</button>
+    <button class="action-btn" id="restart-btn" onclick="location.reload()">🔄 Yangilash</button>
+</div>
+
+<script>
+// Test ma'lumotlari (140 ta savol)
+const testData = [
+    // 1-25
+    {q: "Innovatsiya so'zining lug'aviy ma'nosi?", a: ["Yangi g'oya yaratish va joriy etish", "Faqat texnologik yangilik", "Davlat siyosati", "Ilmiy kashfiyot"], c: 0},
+    {q: "Innovatsiya nima o'z ichiga olmaydi?", a: ["Yangi g'oya", "Yangi mahsulot", "Yangi usul", "Eski texnologiyani qayta ishlatish"], c: 3},
+    {q: "Innovatsiyaning asosiy belgisi?", a: ["Arzonligi", "Amaliyotga joriy etilganligi", "Ilmiy darajasi", "Davlat qo'llab-quvvatlaganligi"], c: 1},
+    {q: "Disruptive innovation xususiyati?", a: ["Bozorni o'zgartiradi", "Faqat boy mijozlar uchun", "Katta kapital talab qiladi", "Davlat monopoliya qiladi"], c: 0},
+    {q: "Innovatsiya va ixtiro farqi?", a: ["Innovatsiya g'oya, ixtiro mahsulot", "Innovatsiya amaliy, ixtiro nazariy", "Innovatsiya faqat texnologiya", "Farq yo'q"], c: 1},
+    {q: "Yashil innovatsiya nima?", a: ["Qishloq xo'jaligi", "Ekologik toza texnologiyalar", "Yangi qurilish materiallari", "Energiya tejovchi uskunalar"], c: 1},
+    {q: "Ochiq innovatsiya tamoyili?", a: ["Maxfiylik", "G'oyalar almashish", "Ichki resurslar", "Davlat xizmatlari"], c: 1},
+    {q: "Eng yuqori innovatsion daraja?", a: ["Mahsulot innovatsiyasi", "Jarayon innovatsiyasi", "Biznes-model innovatsiyasi", "Marketing innovatsiyasi"], c: 2},
+    {q: "Innovatsiyaning asosiy manbai?", a: ["Davlat", "Banklar", "Tadbirkorlik", "Xalqaro tashkilotlar"], c: 2},
+    {q: "Innovatsion menejment nima?", a: ["Mahsulot sotish", "Innovatsion jarayonlarni boshqarish", "Patent himoyasi", "Bozor tadqiqotlari"], c: 1},
+    {q: "Innovatsiyalarni eng oxirgi qabul qiluvchi?", a: ["Innovatorlar", "Erta qabul qiluvchilar", "Ko'pchilik", "Orqada qoluvchilar"], c: 3},
+    {q: "Innovatsion indeks nima?", a: ["Mamlakatning innovatsion darajasi", "Startap kompaniyalar soni", "Patentlar soni", "Eksport hajmi"], c: 0},
+    {q: "Eng ko'p innovatsiya yaratadigan soha?", a: ["Axborot texnologiyalari", "Qishloq xo'jaligi", "Qurilish", "Madaniyat"], c: 0},
+    {q: "Innovatsion faoliyatning yakuniy maqsadi?", a: ["Ilmiy darajani oshirish", "Davlat byudjetini to'ldirish", "Iqtisodiy o'sish va raqobatbardoshlik", "Xalqaro tan olinish"], c: 2},
+    {q: "Innovatsion faoliyatga to'siq?", a: ["Moliyaviy qo'llab-quvvatlash", "Qonunchilik bazasi", "Byurokratik to'siqlar", "Ilmiy-tadqiqotlar"], c: 2},
+    {q: "Innovatsion siyosatni kim amalga oshiradi?", a: ["Davlat", "Xususiy sektor", "Notijorat tashkilotlar", "Xalqaro tashkilotlar"], c: 0},
+    {q: "Innovatsion siyosat vositasi emas?", a: ["Soliq imtiyozlari", "Grantlar", "Patent huquqlari", "Narxlar nazorati"], c: 3},
+    {q: "O'zbekistonda innovatsion siyosatni kim olib boradi?", a: ["Vazirlar Mahkamasi", "Innovatsion rivojlanish vazirligi", "Iqtisodiyot vazirligi", "Oliy ta'lim vazirligi"], c: 1},
+    {q: "Innovatsion strategiya nima?", a: ["Uzoq muddatli rivojlanish yo'nalishi", "Marketing rejasi", "Xalqaro hamkorlik dasturi", "Ilmiy tadqiqotlarni rejalashtirish"], c: 0},
+    {q: "Innovatsion byudjet nima?", a: ["Davlatning umumiy byudjeti", "Innovatsion faoliyatga ajratilgan mablag'", "Startap kompaniyalar mablag'lari", "Xalqaro grantlar"], c: 1},
+    {q: "Innovatsion klaster nima?", a: ["Innovatsion tashkilotlarning geografik guruhi", "Davlat idorasi", "Xalqaro tashkilot", "Bank tizimi"], c: 0},
+    {q: "Innovatsion siyosatning moliyaviy vositalari?", a: ["Faqat grantlar", "Grantlar, subsidiyalar, soliq imtiyozlari", "Faqat kreditlar", "Faqat davlat buyurtmalari"], c: 1},
+    {q: "Soliq kredit innovatsion siyosatda qanday qo'llaniladi?", a: ["Soliq bazasini kengaytirish", "Tadqiqotga sarflangan mablag'larni chegirma qilish", "Qo'shimcha soliqlar solish", "Davlat byudjetini to'ldirish"], c: 1},
+    {q: "Innovatsion xaridlar nima?", a: ["Davlatning innovatsion mahsulotlarni sotib olishi", "Korxonalarning yangi uskunalar xaridi", "Aholining yangi texnologiyalarni sotib olishi", "Xalqaro bozorda sotib olish"], c: 0},
+    {q: "Innovatsion siyosat yo'nalishi emas?", a: ["Ilmiy-tadqiqot ishlarini rivojlantirish", "Innovatsion faoliyatni moliyalashtirish", "Importni cheklash", "Kadrlar tayyorlash"], c: 2},
+    // 26-50
+    {q: "Triple helix modeli nimani anglatadi?", a: ["Davlat, universitetlar va biznes hamkorligi", "Ishlab chiqarish, savdo, xizmatlar", "Ilm, amaliyot, innovatsiya", "Moliyalashtirish, ishlab chiqarish, sotish"], c: 0},
+    {q: "Innovatsion siyosatning ijtimoiy maqsadi?", a: ["Davlat daromadlarini oshirish", "Aholi turmush darajasini oshirish", "Xalqaro nufuzni oshirish", "Harbiy qudratni oshirish"], c: 1},
+    {q: "Innovatsion monitoring nima?", a: ["Loyihalarni kuzatish", "Faoliyat natijalarini doimiy kuzatish va baholash", "Bozor talabini o'rganish", "Patentlar bazasini kuzatish"], c: 1},
+    {q: "Innovatsion ekosistema nima?", a: ["Faqat texnopark va laboratoriyalar", "Turli ishtirokchilar o'rtasidagi hamkorlik tizimi", "Davlatning innovatsion loyihalari", "Xalqaro kompaniyalar uyushmasi"], c: 1},
+    {q: "Innovatsion ekosistema atamasi qachon paydo bo'ldi?", a: ["1950-yillar", "1970-yillar", "1990-yillar", "2010-yillar"], c: 2},
+    {q: "Innovatsion ekosistemaning asosiy elementlari?", a: ["Davlat, universitetlar, biznes", "Banklar, sug'urta kompaniyalari, bozor", "Ishlab chiqarish, savdo, marketing", "Ilmiy tadqiqotlar, amaliyot, joriy etish"], c: 0},
+    {q: "Inson kapitali deganda nima tushuniladi?", a: ["Faqat muhandislar", "Bilim, ko'nikma va ijodiy qobiliyat", "Davlat byudjeti", "Infratuzilma"], c: 1},
+    {q: "Innovatsion ekosistema elementi emas?", a: ["Universitetlar", "Soliq imtiyozlari", "Tabiat qo'riqxonasi", "Venchur fondlar"], c: 2},
+    {q: "Silicon Valley nima sifatida tanilgan?", a: ["Qishloq xo'jaligi zonasi", "Innovatsion ekosistemaning namunasi", "Davlat boshqaruv markazi", "Sanoat korxonasi"], c: 1},
+    {q: "Venchur fondning roli?", a: ["Davlat byudjetini nazorat qilish", "Innovatsion loyihalarni moliyalashtirish", "Bozor narxlarini nazorat qilish", "Mahsulot sifatini nazorat qilish"], c: 1},
+    {q: "Texnopark nima?", a: ["Faqat ilmiy tadqiqotlar olib boriladigan joy", "Innovatsion kompaniyalar uchun infratuzilma va xizmatlar markazi", "Davlat idoralari majmuasi", "Bank va moliya institutlari"], c: 1},
+    {q: "Innovatsion klasterning asosiy maqsadi?", a: ["Geografik yaqinlikdan foydalanib sinergiya yaratish", "Soliq yig'ishni oshirish", "Davlat xarajatlarini kamaytirish", "Importni cheklash"], c: 0},
+    {q: "Innovatsion ekosistemani farqlovchi jihat?", a: ["Murakkabligi va o'zaro bog'liqligi", "Soddaligi va aniqligi", "Markazlashtirilganligi", "Qat'iy tartibi"], c: 0},
+    {q: "Startup nima?", a: ["Katta, uzoq yillik kompaniya", "Yangi, o'sib borayotgan innovatsion kompaniya", "Davlat korxonasi", "Xalqaro tashkilot"], c: 1},
+    {q: "Mentorlik nima?", a: ["Moliyaviy yordam", "Tajribali mutaxassisning yosh innovatorlarga maslahati", "Davlat tomonidan nazorat", "Xalqaro sertifikatlashtirish"], c: 1},
+    {q: "Accelerator nima?", a: ["Startup larni tez rivojlantirish dasturi", "Davlat subsidiyalari markazi", "Bank kreditlari bo'limi", "Patent idorasi"], c: 0},
+    {q: "Innovatsion zanjir tushunchasi?", a: ["Innovatsion jarayonning ketma-ket bosqichlari", "Kompaniyalar o'rtasidagi shartnomalar", "Davlat xaridlari", "Xalqaro standartlar"], c: 0},
+    {q: "Innovatsion ekosistemani rivojlantirishda eng muhim omil?", a: ["Infratuzilma", "Moliyaviy resurslar", "Hamkorlik va ishonch", "Qonunchilik bazasi"], c: 2},
+    {q: "Innovatsion madaniyat nima?", a: ["Yangiliklarga ochiqlik va tajriba uchun tayyorlik", "An'anaviy qadriyatlar asoslanishi", "Davlat siyosati", "Korporativ qoidalar"], c: 0},
+    {q: "Innovatsion ekosistemaning barqarorligi nimaga bog'liq?", a: ["Davlat subsidiyalariga", "Doimiy yangilanish va moslashuvchanlikka", "Xorijiy investitsiyalarga", "Markazlashtirilgan boshqaruvga"], c: 1},
+    {q: "Davlatning innovatsion siyosatdagi roliga kirmaydi?", a: ["Ilmiy tadqiqotlarni moliyalashtirish", "Patent huquqlarini himoya qilish", "Startup larni boshqarish", "Innovatsion infratuzilmani rivojlantirish"], c: 2},
+    {q: "Davlat-xususiy sheriklik (PPP) ahamiyati?", a: ["Risklarni taqsimlash va resurslarni birlashtirish", "Davlat monopoliyasini kuchaytirish", "Xususiy sektorni cheklash", "Soliqlarni oshirish"], c: 0},
+    {q: "Innovatsion faoliyatni rag'batlantirishning eng samarali usuli?", a: ["To'g'ridan-to'g'ri subsidiyalar", "Soliq imtiyozlari va grantlar", "Narx nazorati", "Import bojlarini oshirish"], c: 1},
+    {q: "Innovatsion siyosatni amalga oshirishdagi eng katta muammo?", a: ["Byurokratik to'siqlar", "Mablag' yetishmasligi", "Kadrlar yetishmasligi", "Xalqaro raqobat"], c: 0},
+    {q: "Davlatning innovatsion rivojlanishdagi moliyaviy roli?", a: ["Grantlar, subsidiyalar, soliq imtiyozlari", "Faqat davlat budjeti", "Xususiy investitsiyalarni cheklash", "Valyuta kursini nazorat qilish"], c: 0},
+    // 51-140 (qisqartirilgan versiya - aslida 140 ta bor)
+    {q: "Davlatning qonunchilik bazasini yaratishdagi roli?", a: ["Innovatsion faoliyat uchun qulay huquqiy muhit yaratish", "Faqat soliq qonunlarini ishlab chiqish", "Xususiy mulk huquqini cheklash", "Patent huquqlarini bekor qilish"], c: 0},
+    {q: "Innovatsion mahsulotlar eksportini rag'batlantirishda davlatning roli?", a: ["Eksport kreditlari va bojxona imtiyozlari", "Faqat importni cheklash", "Eksportni monopoliya qilish", "Chet el bozorlarini to'sib qo'yish"], c: 0},
+    {q: "Davlatning innovatsion rivojlanishni moliyalashtirish manbalari?", a: ["Davlat budjeti, xalqaro grantlar, xususiy investitsiyalar", "Faqat soliq tushumlari", "Faqat xorijiy qarzlar", "Faqat mahalliy banklar"], c: 0},
+    {q: "Innovatsion siyosatni muvofiqlashtirishda davlatning roli?", a: ["Turli davlat organlari o'rtasida hamkorlikni ta'minlash", "Faqat markaziy boshqaruvni kuchaytirish", "Mahalliy boshqaruvni cheklash", "Xususiy sektorning ta'sirini kamaytirish"], c: 0},
+    {q: "Innovatsion rivojlanishda muvaffaqiyatli bo'lish uchun eng muhim shart?", a: ["Moslashuvchanlik va doimiy takomillashtirish", "Faqat katta moliyaviy resurslar", "Kuchli markazlashtirilgan boshqaruv", "Xususiy sektorni cheklash"], c: 0},
+    {q: "Innovatsion faoliyatni moliyalashtirishning asosiy manbalari?", a: ["Davlat grantlari, venchur kapital, bank kreditlari", "Faqat davlat budjeti", "Faqat xususiy investitsiyalar", "Faqat xalqaro kreditlar"], c: 0},
+    {q: "Venchur kapital nima?", a: ["Yuqori daromad keltiradigan loyihalarga investitsiya qiluvchi fond", "Davlat subsidiyalari", "Bank kreditlari", "Shaxsiy jamg'armalar"], c: 0},
+    {q: "Venchur fondlar qanday loyihalarga investitsiya qiladi?", a: ["Yuqori riskli, lekin yuqori daromadli innovatsion loyihalar", "Faqat an'anaviy biznes loyihalariga", "Faqat davlat korxonalariga", "Faqat katta kompaniyalarga"], c: 0},
+    {q: "Business angel (biznes farishta) kim?", a: ["Startup loyihalarga shaxsiy mablag' investitsiya qiluvchi tajribali investor", "Davlat xodimi", "Bank menejeri", "Xalqaro ekspert"], c: 0},
+    {q: "Grant nima?", a: ["Qaytarilmas moliyaviy yordam", "Qaytariladigan kredit", "Aktsiyalar sotib olish", "Qarz majburiyati"], c: 0},
+    {q: "Soliq imtiyozlari innovatsion faoliyatni qanday rag'batlantiradi?", a: ["Soliq yukini kamaytirib, qo'shimcha mablag'lar ajratish imkonini beradi", "Soliqlarni oshiradi", "Faqat davlat korxonalariga imtiyoz beradi", "Xususiy sektorni cheklaydi"], c: 0},
+    {q: "Crowdfunding nima?", a: ["Katta miqdordagi odamlardan kichik hajmdagi mablag'lar to'plash", "Faqat banklardan kredit olish", "Davlat grantlari olish", "Xalqaro fondlardan mablag' olish"], c: 0},
+    {q: "IPO nima?", a: ["Kompaniyaning birinchi marta fond birjasida aktsiyalarini sotishi", "Bankdan kredit olish", "Davlat granti olish", "Venchur fonddan investitsiya olish"], c: 0},
+    {q: "Innovatsion loyihalarni moliyalashtirishda eng katta risk?", a: ["Texnologik risk", "Bozor riski", "Moliyaviy risk", "Barchasi to'g'ri"], c: 3},
+    {q: "Due diligence nima uchun kerak?", a: ["Loyihaning iqtisodiy va texnologik maqsadga muvofiqligini baholash", "Faqat moliyaviy hisobotlarni tekshirish", "Davlat organlaridan ruxsat olish", "Bozor tadqiqotlari o'tkazish"], c: 0},
+    {q: "Venchur fondning chiqish strategiyasi nima?", a: ["Investitsiya qilingan kompaniyadan foyda olish usuli", "Fondni yopish", "Yangi investorlarni jalb qilish", "Davlat subsidiyalari olish"], c: 0},
+    {q: "Bootstrapping nima?", a: ["Tashqi moliyalashtirishsiz, o'z mablag'lari hisobida rivojlantirish", "Bank kreditlari", "Venchur kapital", "Davlat grantlari"], c: 0},
+    {q: "Korporativ venchur fond nima?", a: ["Yirik korporatsiyalarning venchur fondlari", "Davlat venchur fondlari", "Xususiy investitsiya fondlari", "Bank investitsiya fondlari"], c: 0},
+    {q: "Innovatsion faoliyatni moliyalashtirishda davlatning roli?", a: ["Dastlabki bosqichlarda grantlar orqali qo'llab-quvvatlash", "Faqat katta korporatsiyalarni moliyalashtirish", "Barcha loyihalarni to'liq moliyalashtirish", "Faqat bank kreditlarini kafolatlash"], c: 0},
+    {q: "Seed funding nima?", a: ["Loyihaning dastlabki, g'oya bosqichidagi moliyalashtirish", "Kengaytirish bosqichidagi moliyalashtirish", "IPO bosqichi", "Qayta moliyalashtirish"], c: 0},
+    {q: "Valuation nima?", a: ["Kompaniyaning moliyaviy qiymatini aniqlash", "Mahsulot narxini belgilash", "Bozor hajmini hisoblash", "Investitsiya riskini baholash"], c: 0},
+    {q: "Convertible note nima?", a: ["Kelajakda aktsiyalarga aylantiriladigan qarz majburiyati", "Oddiy bank kreditiga aylantiriladigan qarz", "Davlat granti", "Venchur kapital"], c: 0},
+    {q: "Exit nima?", a: ["Investordan foyda olish va loyihani sotish", "Loyihani yopish", "Bankrotlik deklaratsiyasi", "Davlat subsidiyalarini qaytarish"], c: 0},
+    {q: "Innovatsion loyihalarni moliyalashtirishda eng muhim omil?", a: ["Loyihaning innovatsion potentsiali va bozor imkoniyatlari", "Faqat moliyaviy resurslar", "Davlat qo'llab-quvvatlash", "Xalqaro investitsiyalar"], c: 0},
+    {q: "Innovatsion infratuzilma nima?", a: ["Innovatsion faoliyatni qo'llab-quvvatlovchi obyektlar va xizmatlar", "Transport tarmog'i", "Kommunal xizmatlar", "Maktab va bog'chalar"], c: 0},
+    {q: "Texnoparkning asosiy vazifasi?", a: ["Innovatsion kompaniyalarga ofis, laboratoriya va xizmatlar ko'rsatish", "Faqat ilmiy tadqiqotlar olib borish", "Davlat idoralarini joylashtirish", "Sanoat korxonalarini boshqarish"], c: 0},
+    {q: "Inkubator nima?", a: ["Yangi startup larni dastlabki bosqichda qo'llab-quvvatlovchi tashkilot", "Katta korxonalarni boshqaruvchi tashkilot", "Davlat moliyaviy instituti", "Xalqaro hamkorlik markazi"], c: 0},
+    {q: "Accelerator nima?", a: ["Startup larni tez o'sish uchun intensiv dastur", "Davlat subsidiyalari markazi", "Bank kreditlari bo'limi", "Patent idorasi"], c: 0},
+    {q: "Innovatsion klaster nima?", a: ["Bir sohada faoliyat yurituvchi korxona va tashkilotlarning geografik guruhi", "Davlat idoralari majmuasi", "Xalqaro kompaniyalar filiallari", "Transport logistika markazi"], c: 0},
+    {q: "Keng polosali Internet qaysi infratuzilmaga kiradi?", a: ["Raqamli infratuzilma", "Transport infratuzilma", "Energiya infratuzilma", "Kommunikatsiya infratuzilma"], c: 3},
+    {q: "Prototip laboratoriyasi nima?", a: ["Yangi mahsulotlar prototiplarini yaratish uchun jihozlangan joy", "Kimyo laboratoriyasi", "Tibbiyot laboratoriyasi", "Qishloq xo'jaligi laboratoriyasi"], c: 0},
+    {q: "Koworking markazi nima?", a: ["Turli mutaxassislar uchun umumiy ish joyi", "Faqat davlat xodimlari uchun ofis", "Bank filiali", "Savdo markazi"], c: 0},
+    {q: "Innovatsion infratuzilmani rivojlantirishda davlatning roli?", a: ["Asosiy infratuzilmani qurish va subsidiyalash", "Faqat xususiy sektorni nazorat qilish", "Barcha infratuzilmani xususiylashtirish", "Chet el kompaniyalariga imtiyozlar berish"], c: 0},
+    {q: "Ilmiy-tadqiqot instituti qaysi infratuzilmaga kiradi?", a: ["Ilmiy infratuzilma", "Ishlab chiqarish infratuzilma", "Ta'lim infratuzilma", "Logistika infratuzilma"], c: 0},
+    {q: "Innovatsion infratuzilmaning eng muhim elementi?", a: ["Odamlar (kadrlar)", "Binolar", "Uskunalar", "Mablag'lar"], c: 0},
+    {q: "Virtual inkubator nima?", a: ["Onlayn platforma orqali startup larni qo'llab-quvvatlash", "Real binosi bo'lmagan tashkilot", "Xalqaro tashkilot", "Davlat dasturi"], c: 0},
+    {q: "Innovatsion infratuzilmani barqaror rivojlantirish uchun nima kerak?", a: ["Doimiy yangilanish va modernizatsiya", "Faqat katta mablag'lar", "Chet el texnologiyalari", "Davlat monopoliyasi"], c: 0},
+    {q: "O'zbekistonda innovatsion siyosatni amalga oshiruvchi asosiy organ?", a: ["Innovatsion rivojlanish vazirligi", "Iqtisodiyot va moliya vazirligi", "Oliy ta'lim vazirligi", "Investitsiyalar va tashqi savdo vazirligi"], c: 0},
+    {q: "O'zbekistonda InnoCampus loyihasi qachon boshlangan?", a: ["2019 yil", "2020 yil", "2021 yil", "2022 yil"], c: 0},
+    {q: "O'zbekistonda 2023-yilda innovatsion loyihalar uchun qancha mablag' ajratilgan?", a: ["500 mlrd so'm", "1 trillion so'm", "1,2 trillion so'm", "2 trillion so'm"], c: 2},
+    {q: "O'zbekistonda innovatsion faoliyat bilan shug'ullanuvchi korxonalar ulushi?", a: ["5-7%", "10-15%", "20-25%", "30-35%"], c: 1},
+    {q: "O'zbekistonda innovatsion mahsulotlar ishlab chiqarish indeksi?", a: ["3-5%", "7-10%", "12-15%", "18-20%"], c: 1},
+    {q: "O'zbekiston Global Innovatsion Indeksda qaysi o'rinda?", a: ["50-60", "60-70", "80-90", "100-110"], c: 2},
+    {q: "O'zbekistonda birinchi texnopark qaysi universitetda ochilgan?", a: ["O'zbekiston Milliy universiteti", "Toshkent davlat texnika universiteti", "Toshkent axborot texnologiyalari universiteti", "Samarqand davlat universiteti"], c: 2},
+    {q: "O'zbekistonda innovatsion faoliyatni rivojlantirish bo'yicha qaysi davlat dasturi mavjud?", a: [""Yangi O'zbekiston" strategiyasi", "Obod mahalla", "Yoshlar da'vati", "O'zbekiston-2030"], c: 0},
+    {q: "O'zbekistonda innovatsion faoliyatni moliyalashtirishda qaysi yo'nalish ustuvor?", a: ["Axborot texnologiyalari va raqamlashtirish", "Qishloq xo'jaligi", "Qurilish materiallari", "Yengil sanoat"], c: 0},
+    {q: "O'zbekistonda innovatsion rivojlanishning kelajakdagi ustuvor yo'nalishi?", a: ["Sun'iy intellekt va raqamli iqtisodiyot", "An'anaviy sanoat", "Qishloq xo'jaligi", "Neft va gaz sanoati"], c: 0},
+    {q: "Global Innovatsion Indeksni qaysi tashkilot nashr etadi?", a: ["BMT", "Jahon banki", "Jahon intellektual mulk tashkiloti (WIPO)", "Xalqaro valyuta fondi"], c: 2},
+    {q: "2023-yil GII bo'yicha birinchi o'rinda qaysi mamlakat?", a: ["AQSh", "Shveysariya", "Singapur", "Janubiy Koreya"], c: 1},
+    {q: "Global Innovatsion Indeksda O'zbekiston qaysi guruhga kiradi?", a: ["Yuqori daromadli mamlakatlar", "Yuqori-o'rta daromadli mamlakatlar", "O'rta daromadli mamlakatlar", "Past daromadli mamlakatlar"], c: 2},
+    {q: "Osiyoda innovatsion faoliyat bo'yicha eng yaxshi ko'rsatkichga ega mamlakat?", a: ["Xitoy", "Yaponiya", "Singapur", "Janubiy Koreya"], c: 2},
+    {q: "Bloomberg Innovation Index qaysi ko'rsatkichlarni hisobga oladi?", a: ["Faqat texnologik patentlar", "R&D sarflari, ta'lim, ishlab chiqarish", "Faqat startup investitsiyalari", "Davlat innovatsion byudjeti"], c: 1},
+    {q: "Jahon bo'yicha umumiy R&D sarflari YAIMning necha foizini tashkil qiladi?", a: ["1%", "2,2%", "3,5%", "4,8%"], c: 1},
+    {q: "R&D sarflari bo'yicha dunyoda birinchi o'rinda qaysi mamlakat?", a: ["AQSh", "Xitoy", "Yaponiya", "Germaniya"], c: 0},
+    {q: "2023-yil ma'lumotlariga ko'ra, R&D ga eng ko'p mablag' sarflaydigan kompaniya?", a: ["Samsung", "Alphabet (Google)", "Huawei", "Microsoft"], c: 1},
+    {q: "Xitoyning R&D sarflari son jihatdan qaysi yilda AQSh dan o'tgan?", a: ["2015", "2018", "2020", "2022"], c: 2},
+    {q: "Yevropa Ittifoqining Horizon Europe dasturi byudjeti?", a: ["50 mlrd evro", "75 mlrd evro", "95,5 mlrd evro", "120 mlrd evro"], c: 2},
+    {q: "Dunyodagi eng yirik startup ekosistemasi qaysi shaharda?", a: ["Nyu-York", "San-Fransisko (Silicon Valley)", "London", "Pekin"], c: 1},
+    {q: "Unicorn kompaniya deganda qanday kompaniya tushuniladi?", a: ["1 yillik startup", "Bahosi 1 milliard dollardan ortiq startup", "10 mamlakatda faoliyat yurituvchi kompaniya", "Faqat AI texnologiyalari bilan shug'ullanuvchi kompaniya"], c: 1},
+    {q: "2023-yil holatiga ko'ra, dunyoda nechta unicorn kompaniya mavjud?", a: ["500 dan kam", "1000 ga yaqin", "1500 dan ortiq", "2000 ga yaqin"], c: 1},
+    {q: "Eng ko'p unicorn kompaniyaga ega mamlakat?", a: ["AQSh", "Xitoy", "Hindiston", "Birlashgan Qirollik"], c: 0},
+    {q: "Sun'iy intellekt sohasidagi global investitsiyalar 2023-yilda qancha bo'lgan?", a: ["50 mlrd dollar", "154 mlrd dollar", "200 mlrd dollar", "250 mlrd dollar"], c: 1},
+    {q: "Times Higher Education universitetlar reytingida 2024-yilda birinchi o'rinda qaysi universitet?", a: ["Oksford universiteti", "Garvard universiteti", "Stenford universiteti", "Kembrij universiteti"], c: 0},
+    {q: "STEM yo'nalishlari bo'yicha bitiruvchilar soni bo'yicha yetakchi mamlakat?", a: ["Xitoy", "Hindiston", "AQSh", "Rossiya"], c: 0},
+    {q: "Onlayn ta'lim bozorining 2025-yilgacha prognoz qilingan hajmi?", a: ["100 mlrd dollar", "350 mlrd dollar", "500 mlrd dollar", "750 mlrd dollar"], c: 1},
+    {q: "Korporativ innovatsiyalar bo'yicha yetakchi kompaniya?", a: ["Apple", "Amazon", "Tesla", "Samsung"], c: 1},
+    {q: "Global patent arizalari soni bo'yicha birinchi o'rinda qaysi mamlakat?", a: ["AQSh", "Xitoy", "Yaponiya", "Janubiy Koreya"], c: 1},
+    {q: "Yiliga eng ko'p patent oladigan kompaniya?", a: ["IBM", "Samsung", "Canon", "Microsoft"], c: 0},
+    {q: "Yevropada innovatsion faoliyat bo'yicha yetakchi mamlakat?", a: ["Germaniya", "Shveysariya", "Shvetsiya", "Finlandiya"], c: 1},
+    {q: "Afrikada innovatsion rivojlanish bo'yicha yetakchi mamlakat?", a: ["Janubiy Afrika", "Marokash", "Misr", "Koniya"], c: 1},
+    {q: "Lotin Amerikasida innovatsion reytingda birinchi o'rinda qaysi mamlakat?", a: ["Braziliya", "Chili", "Meksika", "Argentina"], c: 1},
+    {q: "Arab dunyosida innovatsion rivojlanish bo'yicha yetakchi mamlakat?", a: ["Saudiya Arabistoni", "Birlashgan Arab Amirliklari", "Qatar", "Bahrayn"], c: 1},
+    {q: "Markaziy Osiyoda innovatsion rivojlanish indeksi bo'yicha yetakchi mamlakat?", a: ["Qozog'iston", "O'zbekiston", "Qirg'iziston", "Turkmaniston"], c: 0},
+    {q: "Yashil texnologiyalar bozorining 2030-yilgacha prognoz qilingan hajmi?", a: ["1 trillion dollar", "2,5 trillion dollar", "5 trillion dollar", "7,5 trillion dollar"], c: 1},
+    {q: "Qayta tiklanuvchi energiya manbalariga global investitsiyalar 2022-yilda qancha bo'lgan?", a: ["300 mlrd dollar", "500 mlrd dollar", "700 mlrd dollar", "1 trillion dollar"], c: 1},
+    {q: "Elektr avtomobillar bozorining 2030-yilgacha prognoz qilingan ulushi?", a: ["15%", "30%", "45%", "60%"], c: 1},
+    {q: "Circular economy konsepsiyasini joriy etish bo'yicha yetakchi mamlakat?", a: ["Germaniya", "Niderlandiya", "Shvetsiya", "Yaponiya"], c: 1},
+    {q: "Global raqamli transformatsiya bozorining 2025-yilgacha prognoz qilingan hajmi?", a: ["1 trillion dollar", "3,4 trillion dollar", "5 trillion dollar", "7 trillion dollar"], c: 1},
+    {q: "Kvant hisoblash texnologiyalari bozorining 2030-yilgacha prognoz qilingan hajmi?", a: ["10 mlrd dollar", "65 mlrd dollar", "100 mlrd dollar", "150 mlrd dollar"], c: 1},
+    {q: "Biotexnologiya bozorining 2028-yilgacha prognoz qilingan hajmi?", a: ["1,2 trillion dollar", "2,5 trillion dollar", "3,5 trillion dollar", "5 trillion dollar"], c: 0},
+    {q: "Davlat R&D sarflari bo'yicha YAIMdagi ulushi bo'yicha yetakchi mamlakat?", a: ["AQSh", "Isroil", "Janubiy Koreya", "Yaponiya"], c: 1},
+    {q: "Innovatsion startaplarni qo'llab-quvvatlash bo'yicha eng yaxshi tizimga ega mamlakat?", a: ["Singapur", "Estoniya", "Kanada", "Avstraliya"], c: 1},
+    {q: "Beynalmilqal talent indeksida birinchi o'rinda qaysi mamlakat?", a: ["AQSh", "Shveysariya", "Singapur", "Kanada"], c: 1},
+    {q: "Beyin oqimi indeksi bo'yicha eng yomon ko'rsatkichga ega mintaqa?", a: ["Sharqiy Yevropa", "Afrika", "Lotin Amerikasi", "O'rta Sharq"], c: 1},
+    {q: "Beyin qabuli bo'yicha eng yaxshi siyosatga ega mamlakat?", a: ["AQSh", "Kanada", "Avstraliya", "Germaniya"], c: 1},
+    {q: "Xalqaro patentlar soni bo'yicha 2022-yilda eng ko'p ariza topshirgan tashkilot?", a: ["MIT", "Xitoy Telekommunikatsiya universiteti", "Kaliforniya universiteti", "ETH Tsyurix"], c: 1},
+    {q: "Startap asoschilarining global migratsiyasi bo'yicha eng jozibador shahar?", a: ["London", "Berlin", "Dublin", "Amsterdam"], c: 1},
+    {q: "O'zbekiston 2023-yilda xalqaro patent arizalari soni bo'yicha qaysi o'rinda?", a: ["50-60", "70-80", "90-100", "100 dan past"], c: 1},
+    {q: "Markaziy Osiyo mamlakatlari orasida xalqaro patentlar soni bo'yicha yetakchi?", a: ["Qozog'iston", "O'zbekiston", "Tojikiston", "Turkmaniston"], c: 0},
+    {q: "Global talabalar migratsiyasida O'zbekiston qaysi o'rinda?", a: ["1-10", "11-20", "21-30", "31-40"], c: 1}
+];
+
+let currentSet = 1;
+let currentQuestionIndex = 0;
+let answeredQuestions = new Set();
+let correctCount = 0;
+let currentQuestions = testData.slice(0, 25); // Boshlang'ich: 1-25
+
+const wrapper = document.getElementById('quiz-wrapper');
+const currentEl = document.getElementById('current-question');
+const totalEl = document.getElementById('current-question').nextElementSibling; // Progress barda ko'rsatiladi
+const correctEl = document.getElementById('correct-count');
+const setNumberEl = document.getElementById('set-number');
+const progressFill = document.getElementById('progress-fill');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+const randomBtn = document.getElementById('random-btn');
+const resultBtn = document.getElementById('result-btn');
+const restartBtn = document.getElementById('restart-btn');
+const setButtons = document.querySelectorAll('.set-btn');
+
+// Ovoz funksiyasi
+function playSound(isCorrect) {
+    try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        if (isCorrect) {
+            oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        } else {
+            oscillator.frequency.setValueAtTime(200, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+        }
+        oscillator.start();
+        oscillator.stop(audioCtx.currentTime + 0.3);
+    } catch (e) {
+        console.log("Ovoz xatosi:", e);
+    }
+}
+
+// Feedback animatsiyasi
+function showFeedback(isCorrect) {
+    const feedback = document.createElement('div');
+    feedback.className = 'feedback';
+    feedback.textContent = isCorrect ? '✅' : '❌';
+    feedback.style.color = isCorrect ? '#10b981' : '#ef4444';
+    document.body.appendChild(feedback);
+    
+    setTimeout(() => {
+        feedback.remove();
+    }, 1000);
+}
+
+// Savolni chizish
+function renderQuestion(index) {
+    wrapper.innerHTML = '';
+    currentQuestionIndex = index;
+    currentEl.textContent = index + 1;
+    
+    const question = currentQuestions[index];
+    
+    const card = document.createElement('div');
+    card.className = 'question-card active';
+    
+    card.innerHTML = `
+        <div class="question-number">${index + 1}</div>
+        <div class="question-text">${question.q}</div>
+        <div class="options-grid" id="options-grid"></div>
+    `;
+    
+    const optionsGrid = card.querySelector('#options-grid');
+    const options = [...question.a];
+    
+    // Javoblarni aralashtirish
+    for (let i = options.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [options[i], options[j]] = [options[j], options[i]];
+    }
+    
+    options.forEach((optionText, optionIndex) => {
+        const option = document.createElement('div');
+        option.className = 'option';
+        option.textContent = optionText;
+        
+        if (answeredQuestions.has(index)) {
+            option.classList.add('disabled');
+            if (optionText === question.a[question.c]) {
+                option.classList.add('correct');
+            } else if (answeredQuestions.has(index)) {
+                // Xato javobni ko'rsatish
+            }
+        }
+        
+        option.addEventListener('click', () => {
+            if (answeredQuestions.has(index)) return;
+            
+            answeredQuestions.add(index);
+            option.classList.add('disabled');
+            
+            const isCorrect = optionText === question.a[question.c];
+            
+            if (isCorrect) {
+                option.classList.add('correct');
+                correctCount++;
+                correctEl.textContent = correctCount;
+                playSound(true);
+                showFeedback(true);
+            } else {
+                option.classList.add('wrong');
+                playSound(false);
+                showFeedback(false);
+                
+                // To'g'ri javobni ko'rsatish
+                optionsGrid.querySelectorAll('.option').forEach(opt => {
+                    if (opt.textContent === question.a[question.c]) {
+                        opt.classList.add('correct');
+                    }
+                });
+            }
+            
+            updateProgress();
+            updateNavigation();
+            
+            // Agar hamma savollarga javob berilsa
+            if (answeredQuestions.size === currentQuestions.length) {
+                resultBtn.style.display = 'block';
+            }
+        });
+        
+        optionsGrid.appendChild(option);
+    });
+    
+    wrapper.appendChild(card);
+    updateProgress();
+    updateNavigation();
+}
+
+// Progress yangilash
+function updateProgress() {
+    const progress = (answeredQuestions.size / currentQuestions.length) * 100;
+    progressFill.style.width = `${progress}%`;
+}
+
+// Navigation yangilash
+function updateNavigation() {
+    prevBtn.disabled = currentQuestionIndex === 0;
+    nextBtn.disabled = currentQuestionIndex === currentQuestions.length - 1;
+    
+    // Progress bar rangini o'zgartirish
+    const progress = (answeredQuestions.size / currentQuestions.length) * 100;
+    if (progress >= 70) {
+        progressFill.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+    } else if (progress >= 40) {
+        progressFill.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+    } else {
+        progressFill.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+    }
+}
+
+// Set tanlash
+function selectSet(setNum) {
+    currentSet = setNum;
+    currentQuestionIndex = 0;
+    answeredQuestions.clear();
+    correctCount = 0;
+    correctEl.textContent = '0';
+    
+    // Set tugmalarni yangilash
+    setButtons.forEach(btn => {
+        btn.classList.remove('active');
+        if (parseInt(btn.dataset.set) === setNum) {
+            btn.classList.add('active');
+        }
+    });
+    
+    setNumberEl.textContent = setNum;
+    
+    // Savollarni tanlash
+    const startIndex = (setNum - 1) * 25;
+    const endIndex = Math.min(startIndex + 25, testData.length);
+    currentQuestions = testData.slice(startIndex, endIndex);
+    
+    // Natija tugmasini yashirish
+    resultBtn.style.display = 'none';
+    restartBtn.style.display = 'none';
+    
+    renderQuestion(currentQuestionIndex);
+}
+
+// Random 25 ta savol
+function selectRandomSet() {
+    currentSet = 0;
+    currentQuestionIndex = 0;
+    answeredQuestions.clear();
+    correctCount = 0;
+    correctEl.textContent = '0';
+    
+    // Set tugmalarni yangilash
+    setButtons.forEach(btn => btn.classList.remove('active'));
+    
+    setNumberEl.textContent = 'R';
+    
+    // 140 tadan 25 tasini random tanlash
+    const shuffled = [...testData].sort(() => Math.random() - 0.5);
+    currentQuestions = shuffled.slice(0, 25);
+    
+    // Natija tugmasini yashirish
+    resultBtn.style.display = 'none';
+    restartBtn.style.display = 'none';
+    
+    renderQuestion(currentQuestionIndex);
+}
+
+// Natijani ko'rsatish
+function showResults() {
+    const score = correctCount;
+    const total = currentQuestions.length;
+    const percentage = Math.round((score / total) * 100);
+    
+    let message = '';
+    let emoji = '';
+    
+    if (percentage >= 90) {
+        message = 'AJOYIB! 👑 Mukammal!';
+        emoji = '🎉';
+    } else if (percentage >= 70) {
+        message = 'YAXSHI! 👍 Juda yaxshi ishladingiz!';
+        emoji = '🌟';
+    } else if (percentage >= 50) {
+        message = 'YOQLI! 💪 Yaxshi natija!';
+        emoji = '✅';
+    } else {
+        message = 'YANA MASHQ QILING 💪 Ko'proq o'rganish kerak';
+        emoji = '📚';
+    }
+    
+    wrapper.innerHTML = `
+        <div class="question-card active" style="text-align: center;">
+            <div class="question-number" style="background: ${percentage >= 70 ? '#10b981' : percentage >= 50 ? '#f59e0b' : '#ef4444'}; margin: 0 auto 20px;">
+                ${percentage}%
+            </div>
+            <div class="question-text" style="font-size: 2rem; margin-bottom: 10px;">
+                ${emoji}
+            </div>
+            <div class="question-text" style="font-size: 1.3rem; color: ${percentage >= 70 ? '#10b981' : percentage >= 50 ? '#f59e0b' : '#ef4444'};">
+                ${message}
+            </div>
+            <div style="font-size: 1.1rem; color: #4a5568; margin: 20px 0;">
+                <p>Siz <strong>${total}</strong> ta savoldan <strong style="color: #10b981">${score}</strong> tasiga to'g'ri javob berdingiz</p>
+                <p>To'g'ri javoblar: <strong>${percentage}%</strong></p>
+            </div>
+            <div style="margin-top: 30px;">
+                <button class="action-btn" onclick="location.reload()" style="background: linear-gradient(135deg, #667eea, #764ba2);">
+                    🔄 Yangi test
+                </button>
+            </div>
+        </div>
+    `;
+    
+    restartBtn.style.display = 'block';
+    resultBtn.style.display = 'none';
+}
+
+// Event listener'lar
+setButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+        selectSet(parseInt(btn.dataset.set));
+    });
+});
+
+prevBtn.addEventListener('click', () => {
+    if (currentQuestionIndex > 0) {
+        currentQuestionIndex--;
+        renderQuestion(currentQuestionIndex);
+    }
+});
+
+nextBtn.addEventListener('click', () => {
+    if (currentQuestionIndex < currentQuestions.length - 1) {
+        currentQuestionIndex++;
+        renderQuestion(currentQuestionIndex);
+    }
+});
+
+randomBtn.addEventListener('click', selectRandomSet);
+resultBtn.addEventListener('click', showResults);
+
+// Boshlang'ich yuklash
+selectSet(1);
+
+// iPhone uchun maxsus optimizatsiya
+document.addEventListener('touchstart', function() {}, {passive: true});
+document.addEventListener('touchmove', function(e) {
+    if (e.scale !== 1) { e.preventDefault(); }
+}, {passive: false});
+
+// Offline ishlashi uchun
+window.addEventListener('load', function() {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(function(error) {
+            console.log('ServiceWorker registration failed:', error);
+        });
+    }
+});
+</script>
+</body>
+</html>
